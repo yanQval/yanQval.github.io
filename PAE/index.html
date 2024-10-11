@@ -199,81 +199,80 @@
     
     <script>
     $(document).ready(function() {
-        // Load data from the JSON file
-        $.getJSON('data/webvoyager.json', function(data) {
-            var tableBody = '';
-            data.forEach(function(row) {
-                var category = row.category;
-                var model = row.model;
-                var highlightedColumns = row.highlighted || [];
-    
-                // Start building the table row
-                tableBody += '<tr' + (category === 'Ours' ? ' class="bg-gray"' : '') + '>';
-    
-                // Category column
-                if (row.categoryRowspan) {
-                    tableBody += '<td class="italic" rowspan="' + row.categoryRowspan + '">' + category + '</td>';
-                } else if (row.categoryRepeated) {
-                    // Leave the cell empty for repeated categories
-                    tableBody += '<td></td>';
-                } else {
-                    // For categories without rowspan
-                    tableBody += '<td class="italic">' + category + '</td>';
-                }
-    
-                // Model name
+    // 加载 JSON 数据
+    $.getJSON('data/webvoyager.json', function(data) {
+        var tableBody = '';
+        data.forEach(function(row) {
+            var category = row.category;
+            var model = row.model;
+            var highlightedColumns = row.highlighted || [];
+
+            // 开始构建表格行
+            tableBody += '<tr' + (category === 'Ours' ? ' class="bg-gray"' : '') + '>';
+
+            // 分类列
+            if (row.categoryRowspan) {
+                // 第一行，添加分类和模型名称
+                tableBody += '<td class="italic" rowspan="' + row.categoryRowspan + '">' + category + '</td>';
                 tableBody += '<td' + (model.includes('PAE') ? ' class="bold"' : '') + '>' + model + '</td>';
-    
-                // Data columns
-                var columns = ["Average", "Allrecipes", "Amazon", "Apple", "ArXiv", "GitHub", "ESPN", "Coursera", "Cambridge Dictionary", "BBC News", "Google Map", "Google Search", "HuggingFace", "Wolfram Alpha"];
-                columns.forEach(function(col) {
-                    var value = row[col];
-                    var isHighlighted = highlightedColumns.includes(col);
-                    var cellClass = isHighlighted ? 'highlighted-number' : '';
-                    tableBody += '<td class="' + cellClass + '">' + value + '</td>';
-                });
-    
-                tableBody += '</tr>';
+            } else if (row.categoryRepeated) {
+                // 其他行，添加空的分类列和模型名称
+                tableBody += '<td></td>';
+                tableBody += '<td' + (model.includes('PAE') ? ' class="bold"' : '') + '>' + model + '</td>';
+            } else {
+                // 没有 rowspan 的情况下，正常添加分类和模型名称
+                tableBody += '<td class="italic">' + category + '</td>';
+                tableBody += '<td' + (model.includes('PAE') ? ' class="bold"' : '') + '>' + model + '</td>';
+            }
+
+            // 数据列
+            var columns = ["Average", "Allrecipes", "Amazon", "Apple", "ArXiv", "GitHub", "ESPN", "Coursera", "Cambridge Dictionary", "BBC News", "Google Map", "Google Search", "HuggingFace", "Wolfram Alpha"];
+            columns.forEach(function(col) {
+                var value = row[col];
+                var isHighlighted = highlightedColumns.includes(col);
+                var cellClass = isHighlighted ? 'highlighted-number' : '';
+                tableBody += '<td class="' + cellClass + '">' + value + '</td>';
             });
-    
-            // Append the built table body to the table
-            $('#comparison-table tbody').html(tableBody);
-    
-            // Initialize DataTables
-            var table = $('#comparison-table').DataTable({
-                paging: false,
-                searching: false,
-                ordering: true,
-                info: false,
-                autoWidth: false,
-                order: [[2, 'desc']]
-            });
-    
-            // Highlight maximum values in each column
-            table.columns().every(function() {
-                var column = this;
-                var max = null;
-                var maxIndex = null;
-    
-                // Skip the first two columns (category and model name)
-                if (column.index() < 2) return;
-    
-                column.nodes().each(function(cell, i) {
-                    var cellValue = parseFloat($(cell).text());
-                    if (!isNaN(cellValue)) {
-                        if (max === null || cellValue > max) {
-                            max = cellValue;
-                            maxIndex = i;
-                        }
+
+            tableBody += '</tr>';
+        });
+
+        // 将构建好的表格内容添加到 tbody
+        $('#comparison-table tbody').html(tableBody);
+
+        // 初始化 DataTables
+        var table = $('#comparison-table').DataTable({
+            paging: false,
+            searching: false,
+            ordering: true,
+            info: false,
+            autoWidth: false,
+            order: [[2, 'desc']]
+        });
+
+        // 高亮每列的最大值
+        table.columns().every(function() {
+            var column = this;
+            var max = null;
+            var maxIndex = null;
+
+            if (column.index() < 2) return;
+
+            column.nodes().each(function(cell, i) {
+                var cellValue = parseFloat($(cell).text());
+                if (!isNaN(cellValue)) {
+                    if (max === null || cellValue > max) {
+                        max = cellValue;
+                        maxIndex = i;
                     }
-                });
-    
-                // Add the 'max-value' class to the cell with the maximum value
-                if (maxIndex !== null) {
-                    $(column.nodes()[maxIndex]).addClass('max-value');
                 }
             });
+
+            if (maxIndex !== null) {
+                $(column.nodes()[maxIndex]).addClass('max-value');
+            }
         });
+    });
     });
     </script>
     
