@@ -17,7 +17,7 @@
         "Google Search": "30.2",
         "HuggingFace": "44.2",
         "Wolfram Alpha": "66.7",
-        "highlighted": ["Average", "Amazon", "Coursera", "Cambridge Dictionary"]
+        // "highlighted": ["Average", "Amazon", "Coursera", "Cambridge Dictionary"]
     },
     {
         "category": "Proprietary",
@@ -171,7 +171,7 @@
         "Google Search": "23.3",
         "HuggingFace": "19.0",
         "Wolfram Alpha": "24.4",
-        "highlighted": ["GitHub", "Google Search"]
+        "highlighted": ["GitHub", "Google Map", "Google Search"]
     },
     {
         "category": "Ours",
@@ -211,6 +211,6 @@
         "Google Search": "18.6",
         "HuggingFace": "25.6",
         "Wolfram Alpha": "42.9",
-        "highlighted": ["Average", "Allrecipes", "Amazon", "Apple", "ArXiv", "GitHub", "ESPN", "Coursera", "Cambridge Dictionary", "BBC News", "HuggingFace", "Wolfram Alpha"]
+        "highlighted": ["Average", "Allrecipes", "Amazon", "Apple", "ArXiv", "GitHub", "ESPN", "Cambridge Dictionary", "BBC News", "HuggingFace", "Wolfram Alpha"]
     }
 ]
