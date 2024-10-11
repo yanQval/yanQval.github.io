@@ -16,8 +16,7 @@
         "Google Map": "58.5",
         "Google Search": "30.2",
         "HuggingFace": "44.2",
-        "Wolfram Alpha": "66.7",
-        // "highlighted": ["Average", "Amazon", "Coursera", "Cambridge Dictionary"]
+        "Wolfram Alpha": "66.7"
     },
     {
         "category": "Proprietary",
