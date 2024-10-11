@@ -198,82 +198,80 @@
     </div>
     
     <script>
-    $(document).ready(function() {
-    // 加载 JSON 数据
-    $.getJSON('data/webvoyager.json', function(data) {
-        var tableBody = '';
-        data.forEach(function(row) {
-            var category = row.category;
-            var model = row.model;
-            var highlightedColumns = row.highlighted || [];
-
-            // 开始构建表格行
-            tableBody += '<tr' + (category === 'Ours' ? ' class="bg-gray"' : '') + '>';
-
-            // 分类列
-            if (row.categoryRowspan) {
-                // 第一行，添加分类和模型名称
-                tableBody += '<td class="italic" rowspan="' + row.categoryRowspan + '">' + category + '</td>';
-                tableBody += '<td' + (model.includes('PAE') ? ' class="bold"' : '') + '>' + model + '</td>';
-            } else if (row.categoryRepeated) {
-                // 其他行，添加空的分类列和模型名称
-                tableBody += '<td></td>';
-                tableBody += '<td' + (model.includes('PAE') ? ' class="bold"' : '') + '>' + model + '</td>';
-            } else {
-                // 没有 rowspan 的情况下，正常添加分类和模型名称
-                tableBody += '<td class="italic">' + category + '</td>';
-                tableBody += '<td' + (model.includes('PAE') ? ' class="bold"' : '') + '>' + model + '</td>';
-            }
-
-            // 数据列
-            var columns = ["Average", "Allrecipes", "Amazon", "Apple", "ArXiv", "GitHub", "ESPN", "Coursera", "Cambridge Dictionary", "BBC News", "Google Map", "Google Search", "HuggingFace", "Wolfram Alpha"];
-            columns.forEach(function(col) {
-                var value = row[col];
-                var isHighlighted = highlightedColumns.includes(col);
-                var cellClass = isHighlighted ? 'highlighted-number' : '';
-                tableBody += '<td class="' + cellClass + '">' + value + '</td>';
-            });
-
-            tableBody += '</tr>';
-        });
-
-        // 将构建好的表格内容添加到 tbody
-        $('#comparison-table tbody').html(tableBody);
-
-        // 初始化 DataTables
-        var table = $('#comparison-table').DataTable({
-            paging: false,
-            searching: false,
-            ordering: true,
-            info: false,
-            autoWidth: false,
-            order: [[2, 'desc']]
-        });
-
-        // 高亮每列的最大值
-        table.columns().every(function() {
-            var column = this;
-            var max = null;
-            var maxIndex = null;
-
-            if (column.index() < 2) return;
-
-            column.nodes().each(function(cell, i) {
-                var cellValue = parseFloat($(cell).text());
-                if (!isNaN(cellValue)) {
-                    if (max === null || cellValue > max) {
-                        max = cellValue;
-                        maxIndex = i;
+        $(document).ready(function() {
+            $.getJSON('data/webvoyager.json', function(data) {
+                var tableBody = '';
+                data.forEach(function(row) {
+                    var category = row.category;
+                    var model = row.model;
+                    var highlightedColumns = row.highlighted || [];
+        
+                    // 开始构建表格行
+                    tableBody += '<tr' + (category === 'Ours' ? ' class="bg-gray"' : '') + '>';
+        
+                    // 分类列处理
+                    if (row.categoryRowspan) {
+                        // 第一行，设置 rowspan
+                        tableBody += '<td class="italic" rowspan="' + row.categoryRowspan + '">' + category + '</td>';
+                    } else if (row.categoryRepeated) {
+                        // 非第一行，什么都不做
+                    } else {
+                        // 没有 rowspan 的分类
+                        tableBody += '<td class="italic">' + category + '</td>';
                     }
-                }
+        
+                    // 模型名称
+                    tableBody += '<td' + (model.includes('PAE') ? ' class="bold"' : '') + '>' + model + '</td>';
+        
+                    // 数据列
+                    var columns = ["Average", "Allrecipes", "Amazon", "Apple", "ArXiv", "GitHub", "ESPN", "Coursera", "Cambridge Dictionary", "BBC News", "Google Map", "Google Search", "HuggingFace", "Wolfram Alpha"];
+                    columns.forEach(function(col) {
+                        var value = row[col];
+                        var isHighlighted = highlightedColumns.includes(col);
+                        var cellClass = isHighlighted ? 'highlighted-number' : '';
+                        tableBody += '<td class="' + cellClass + '">' + value + '</td>';
+                    });
+        
+                    tableBody += '</tr>';
+                });
+        
+                // 将构建好的表格体插入到表格中
+                $('#comparison-table tbody').html(tableBody);
+        
+                // 初始化 DataTables
+                var table = $('#comparison-table').DataTable({
+                    paging: false,
+                    searching: false,
+                    ordering: true,
+                    info: false,
+                    autoWidth: false,
+                    order: [[2, 'desc']]
+                });
+        
+                // 高亮每列的最大值
+                table.columns().every(function() {
+                    var column = this;
+                    var max = null;
+                    var maxIndex = null;
+        
+                    if (column.index() < 2) return;
+        
+                    column.nodes().each(function(cell, i) {
+                        var cellValue = parseFloat($(cell).text());
+                        if (!isNaN(cellValue)) {
+                            if (max === null || cellValue > max) {
+                                max = cellValue;
+                                maxIndex = i;
+                            }
+                        }
+                    });
+        
+                    if (maxIndex !== null) {
+                        $(column.nodes()[maxIndex]).addClass('max-value');
+                    }
+                });
             });
-
-            if (maxIndex !== null) {
-                $(column.nodes()[maxIndex]).addClass('max-value');
-            }
         });
-    });
-    });
     </script>
     
     <div class="row">
