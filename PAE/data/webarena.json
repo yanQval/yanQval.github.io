@@ -1,0 +1,113 @@
+[
+    {
+        "category": "Proprietary",
+        "categoryRowspan": 2,
+        "model": "Claude 3.5 Sonnet",
+        "OpenStreetMap": "38.3",
+        "PostMill": "70.0",
+        "OneStopMarket": "53.0",
+        "Average": "50.1"
+    },
+    {
+        "category": "Proprietary",
+        "categoryRepeated": true,
+        "model": "Claude 3 Sonnet",
+        "OpenStreetMap": "24.3",
+        "PostMill": "55.8",
+        "OneStopMarket": "41.7",
+        "Average": "36.0"
+    },
+    {
+        "category": "Open-source",
+        "categoryRowspan": 5,
+        "model": "Qwen2VL-7B",
+        "OpenStreetMap": "0.7",
+        "PostMill": "10.2",
+        "OneStopMarket": "20.2",
+        "Average": "7.5"
+    },
+    {
+        "category": "Open-source",
+        "categoryRepeated": true,
+        "model": "Qwen2VL-72B",
+        "OpenStreetMap": "16.0",
+        "PostMill": "32.8",
+        "OneStopMarket": "32.7",
+        "Average": "23.9"
+    },
+    {
+        "category": "Open-source",
+        "categoryRepeated": true,
+        "model": "InternVL2.5-8B",
+        "OpenStreetMap": "1.8",
+        "PostMill": "0.5",
+        "OneStopMarket": "6.0",
+        "Average": "2.5"
+    },
+    {
+        "category": "Open-source",
+        "categoryRepeated": true,
+        "model": "LLaVa-7B",
+        "OpenStreetMap": "0.0",
+        "PostMill": "0.0",
+        "OneStopMarket": "0.0",
+        "Average": "0.0"
+    },
+    {
+        "category": "Open-source",
+        "categoryRepeated": true,
+        "model": "LLaVa-34B",
+        "OpenStreetMap": "0.9",
+        "PostMill": "0.0",
+        "OneStopMarket": "0.0",
+        "Average": "0.5"
+    },
+    {
+        "category": "Ours",
+        "categoryRowspan": 5,
+        "model": "LLaVa-7B SFT",
+        "OpenStreetMap": "15.2",
+        "PostMill": "16.8",
+        "OneStopMarket": "25.4",
+        "Average": "18.0"
+    },
+    {
+        "category": "Ours",
+        "categoryRepeated": true,
+        "model": "LLaVa-7B PAE",
+        "OpenStreetMap": "19.5",
+        "PostMill": "21.1",
+        "OneStopMarket": "42.3",
+        "Average": "24.6",
+        "highlighted": ["OneStopMarket"]
+    },
+    {
+        "category": "Ours",
+        "categoryRepeated": true,
+        "model": "LLaVa-7B PAE (Qwen72B)",
+        "OpenStreetMap": "17.9",
+        "PostMill": "30.6",
+        "OneStopMarket": "39.2",
+        "Average": "26.0",
+        "highlighted": ["PostMill"]
+    },
+    {
+        "category": "Ours",
+        "categoryRepeated": true,
+        "model": "LLaVa-7B PAE (Qwen7B)",
+        "OpenStreetMap": "20.2",
+        "PostMill": "25.0",
+        "OneStopMarket": "28.6",
+        "Average": "23.1"
+    },
+    {
+        "category": "Ours",
+        "categoryRepeated": true,
+        "model": "LLaVa-7B PAE (User Demos)",
+        "OpenStreetMap": "21.7",
+        "PostMill": "21.5",
+        "OneStopMarket": "42.1",
+        "Average": "25.7",
+        "highlighted": ["OpenStreetMap"]
+    }
+]
