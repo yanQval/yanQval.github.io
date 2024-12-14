@@ -222,10 +222,10 @@
                 <tr>
                     <th rowspan="2"></th>
                     <th rowspan="2"></th>
+                    <th>Average</th>
                     <th>OpenStreetMap</th>
                     <th>PostMill</th>
                     <th>OneStopMarket</th>
-                    <th>Average</th>
                 </tr>
             </thead>
             <tbody>
@@ -260,7 +260,7 @@
                     tableBody += '<td' + (model.includes('PAE') ? ' class="bold"' : '') + '>' + model + '</td>';
             
                     // 数据列
-                    var columns = ["OpenStreetMap", "PostMill", "OneStopMarket", "Average"];
+                    var columns = ["Average", "OpenStreetMap", "PostMill", "OneStopMarket"];
                     columns.forEach(function(col) {
                         var value = row[col];
                         var isHighlighted = highlightedColumns.includes(col);
@@ -282,7 +282,7 @@
                     info: false,
                     autoWidth: false,
                     // 您可以根据需要调整默认排序列和排序方式
-                    order: [[5, 'desc']]
+                    order: [[2, 'desc']]
                 });
             
                 // 高亮每列的最大值
@@ -392,7 +392,7 @@
     <!-- Include Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<div class="row">
+<!-- <div class="row">
     <h3 style="text-align: left;">Human Correlation</h3>
     <p>
         There is a high correlation between our evaluator and human assessments across different models with an average misalignment of 1.7% at the system level and 8.9% at the instance level.
@@ -400,7 +400,7 @@
     <div class="chart-container" id="chart-feedback-p" style="margin: 0 auto; max-width: 800px;">
         <canvas id="chart-feedback-provider" style="width: 100%; height: 400px;"></canvas>
     </div>
-</div>
+</div> -->
 
 <div class="row">
     <h3 style="text-align: left;">Failure Mode Analysis</h3>
