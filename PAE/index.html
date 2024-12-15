@@ -216,13 +216,13 @@
         <h3 style="text-align: left;">Methodology</h3>
 	<p>PAE is built with the awareness of the asymmetric capabilities of SOTA VLMs as task proposers/ evaluators and as agents. Our design 
 		enables foundation model agents to <b>autonomously discover and practice new skills</b> by identifying the interesting tasks with a <b>task proposer</b>, 
-		trying them with an <b>agent policy</b>, and performing RL based on the reward provided by an <b>autonomous evaluator</b>. 
+		trying them with an <b>agent policy</b>, and performing an online RL loop based on the reward provided by an <b>autonomous evaluator</b>. 
 	</p>
 
 	<ul>
-	  <li><b>Context-aware task proposer</b>: </li>
-	  <li><b>Image-based outcome evaluator</b>:</li>
-	  <li><b>Chain-of-thought agent policy</b>:</li>
+	  <li><b>Context-aware task proposer</b>: in order to generate a diverse set of feasible tasks, we frame task proposing as a conditional auto-regressive generation based on the context information of the websites. Tasks are proposed prior to online RL training.</li>
+	  <li><b>Image-based outcome evaluator</b>: to take full advantage of the asymmetric capability of SOTA VLMs as agents and as evaluators, we find it most robust for the autonomous evaluators to complete the easiest evaluation: evaluating the success of the final outcome based on the final three screenshots and the agents' final answers to provide only 0/1 response in the end.</li>
+	  <li><b>Chain-of-thought agent policy</b>: to enable generalization to unseen evaluation tasks, we incorporate an additional reasoning step to outputs the agent's chain-of-thought before the actual web operation. This reasoning step is optimized with the RL algorithm just like the actual web operation. Our experiments are carried out using the simplest online RL algorithm: Filtered BC.</li>
 	</ul>
 	    
         <div style="text-align: center;">
