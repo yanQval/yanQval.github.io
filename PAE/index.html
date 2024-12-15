@@ -224,7 +224,7 @@
 	  <li><b>Image-based outcome evaluator</b>: to take full advantage of the asymmetric capability of SOTA VLMs as agents and as evaluators, we find it most robust for the autonomous evaluators to complete the easiest evaluation: evaluating the success of the final outcome based on the final three screenshots and the agents' final answers to provide only 0/1 response in the end.</li>
 	  <li><b>Chain-of-thought agent policy</b>: to enable generalization to unseen evaluation tasks, we incorporate an additional reasoning step to outputs the agent's chain-of-thought before the actual web operation. This reasoning step is optimized with the RL algorithm just like the actual web operation. Our experiments are carried out using the simplest online RL algorithm: Filtered BC.</li>
 	</ul>
-	    
+	Additional details of the method can be found in our paper!
         <div style="text-align: center;">
             <img src="img/method_overview.jpg" class="img-responsive" alt="overview" width="85%" style="max-height: 600px;margin:auto;" />
         </div>
@@ -232,6 +232,10 @@
     
     <div class="table-container">
         <h3 style="text-align: left;">Main Results on Webvoyager</h3>
+	<p>
+		We compare our generalist VLM web agent on the WebVoyager navigation benchmark on real-time commertial  websites. Task success rate is reported. We found PAE can effectively improve both the 7B and 34B model over their SFT checkpoints, resulting in 50% relative improvements in both cases. 
+		Notably, our LLaVa-34B PAE (https://huggingface.co/yifeizhou/pae-llava-34b) has surpasses the prior best open-source Qwen2VL-72B by more than 10% (33.0% compared to 22.6%), establishing a new state-of-the-art for generalist VLM web agent.
+	</p>
         <table id="comparison-table" class="display">
             <thead>
                 <tr>
@@ -258,8 +262,14 @@
             </tbody>
         </table>
     </div>
+	
+	
     <div class="table-container">
         <h3 style="text-align: left;">Main Results on WebArena Easy</h3>
+	    <p>
+		    To enhance reproducibility of our experiments, we also report the comparison results on another realistic sandboxed web navigation benchmark WebArena Easy, a simplified task set from WebArena.
+		    Again, we observe a similar improvement of PAE compared to the SFT checkpoint, and surpassing the prior state-of-the-art Qwen2VL-72B despite 10x smaller in size.
+	    </p>
         <table id="comparison-table-webarena" class="display">
             <thead>
                 <tr>
