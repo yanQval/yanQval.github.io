@@ -206,7 +206,7 @@
         <h3> Abstract </h3>
         
         <div class="col-md-8 col-md-offset-2 col-lg-offset-0 col-lg-12">
-            <p class="text-justify"> The vision of a broadly capable and goal-directed agent, such as an Internet-browsing agent in the digital world and a household humanoid in the physical world, has rapidly advanced, thanks to the generalization capability of foundation models. Such a generalist agent needs to have a large and diverse skill repertoire, such as finding directions between two travel locations and buying specific items from the Internet. If each skill needs to be specified manually through a fixed set of human-annotated instructions, the agent's skill repertoire will necessarily be limited due to the quantity and diversity of human-annotated instructions. In this work, we address this challenge by proposing Proposer-Agent-Evaluator (PAE), a complete working system that enables foundation model agents to autonomously discover and practice skills in the wild. At the heart of PAE is a context-aware task proposer that autonomously proposes tasks for the agent to practice with context information of the environment such as user demos or even just the name of the website itself for Internet-browsing agents. Then, the agent policy attempts those tasks with thoughts and actual grounded operations in the real world with resulting trajectories evaluated by an autonomous model-based success evaluator. The success evaluation serves as the reward signal for the agent to refine its policies through RL. We validate PAE on challenging vision-based web navigation, using both real-world and self-hosted websites from WebVoyager and WebArena. Our results show that PAE significantly improves the zero-shot generalization capability of VLM Internet agents (more than 30\% relative improvement) to both unseen tasks and websites. Our model also achieves an absolute advantage of over 10% (from 22.6% to 33.0%) comparing to other state-of-the-art open source VLM agents including Qwen2VL-72B. To the best of our knowledge, this work represents the first working system to apply autonomous task proposal with RL for agents that generalizes real-world human-annotated benchmarks with SOTA performances.</p>
+            <p class="text-justify"> The vision of a broadly capable and goal-directed agent, such as an Internet-browsing agent in the digital world and a household humanoid in the physical world, has rapidly advanced, thanks to the generalization capability of foundation models. Such a generalist agent needs to have a large and diverse skill repertoire, such as finding directions between two travel locations and buying specific items from the Internet. If each skill needs to be specified manually through a fixed set of human-annotated instructions, the agent's skill repertoire will necessarily be limited due to the quantity and diversity of human-annotated instructions. In this work, we address this challenge by proposing Proposer-Agent_Evaluator (PAE), a novel framework that enables foundation model agents to autonomously discover and practice skills in the wild. At the heart of PAE is a context-aware task proposer that autonomously proposes tasks for the agent to practice with context information of the websites such as user demos or even just the name of the website itself. Then, the agent policy attempts those tasks in the real world with resulting trajectories evaluated by an autonomous model-based success evaluator. The success evaluation serves as the reward signal for the agent to refine its policies through RL. We validate PAE on challenging vision-based web navigation, using both real-world and self-hosted websites from WebVoyager and WebArena. Our results show that PAE significantly improves the zero-shot generalization capability of VLM Internet agents (more than 30% relative improvement) to both unseen tasks and websites. Our model also achieves an absolute advantage of over 10% (from 22.6% to 33.0%) comparing to other state-of-the-art open source VLM agents including Qwen2VL-72B. To the best of our knowledge, this work represents the first attempt to apply autonomous task proposal with RL for agents, achieving SOTA performance among open-source models. </p>
         </div>
     </div>
 
@@ -214,17 +214,6 @@
 
     <div class="row">
         <h3 style="text-align: left;">Methodology</h3>
-	<p>PAE is built with the awareness of the asymmetric capabilities of SOTA VLMs as task proposers/ evaluators and as agents. Our design 
-		enables foundation model agents to <b>autonomously discover and practice new skills</b> by identifying the interesting tasks with a <b>task proposer</b>, 
-		trying them with an <b>agent policy</b>, and performing an online RL loop based on the reward provided by an <b>autonomous evaluator</b>. 
-	</p>
-
-	<ul>
-	  <li><b>Context-aware task proposer</b>: in order to generate a diverse set of feasible tasks, we frame task proposing as a conditional auto-regressive generation based on the context information of the websites. Tasks are proposed prior to online RL training.</li>
-	  <li><b>Image-based outcome evaluator</b>: to take full advantage of the asymmetric capability of SOTA VLMs as agents and as evaluators, we find it most robust for the autonomous evaluators to complete the easiest evaluation: evaluating the success of the final outcome based on the final three screenshots and the agents' final answers to provide only 0/1 response in the end.</li>
-	  <li><b>Chain-of-thought agent policy</b>: to enable generalization to unseen evaluation tasks, we incorporate an additional reasoning step to outputs the agent's chain-of-thought before the actual web operation. This reasoning step is optimized with the RL algorithm just like the actual web operation. Our experiments are carried out using the simplest online RL algorithm: Filtered BC.</li>
-	</ul>
-	Additional details of the method can be found in our paper!
         <div style="text-align: center;">
             <img src="img/method_overview.jpg" class="img-responsive" alt="overview" width="85%" style="max-height: 600px;margin:auto;" />
         </div>
@@ -232,10 +221,6 @@
     
     <div class="table-container">
         <h3 style="text-align: left;">Main Results on Webvoyager</h3>
-	<p>
-		We compare our generalist VLM web agent on the WebVoyager navigation benchmark on real-time commertial  websites. Task success rate is reported. We found PAE can effectively improve both the 7B and 34B model over their SFT checkpoints, resulting in 50% relative improvements in both cases. 
-		Notably, our LLaVa-34B PAE (https://huggingface.co/yifeizhou/pae-llava-34b) has surpasses the prior best open-source Qwen2VL-72B by more than 10% (33.0% compared to 22.6%), establishing a new state-of-the-art for generalist VLM web agent.
-	</p>
         <table id="comparison-table" class="display">
             <thead>
                 <tr>
@@ -262,14 +247,8 @@
             </tbody>
         </table>
     </div>
-	
-	
     <div class="table-container">
         <h3 style="text-align: left;">Main Results on WebArena Easy</h3>
-	    <p>
-		    To enhance reproducibility of our experiments, we also report the comparison results on another realistic sandboxed web navigation benchmark WebArena Easy, a simplified task set from WebArena.
-		    Again, we observe a similar improvement of PAE compared to the SFT checkpoint, and surpassing the prior state-of-the-art Qwen2VL-72B despite 10x smaller in size.
-	    </p>
         <table id="comparison-table-webarena" class="display">
             <thead>
                 <tr>
@@ -445,21 +424,12 @@
     <!-- Include Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<div class="row">
-    <h3 style="text-align: left;">Comparison</h3>
-<p>
-	We present two qualitative comparisons between the behavior of the SFT checkpoint and the checkpoint after PAE training. In both cases, we observe qualitative evidence of PAE teaching the agent a diverse repertoire to effectively complete unseen tasks.
-</p>
-    <div class="row" align="center">
-        <image src="img/compare_full.png" class="img-responsive" alt="overview" width="85%" style="max-height: 1200px;margin:auto;" />
-    </div>
-</div>
 
 
 <div class="row">
     <h3 style="text-align: left;">Failure Mode Analysis</h3>
     <p>
-        To understand where the improvement of PAE comes from, we conducted a user study to analyze different error types across various models. Comparing the SFT checkpoint and the PAE checkpoint, we found that PAE can effectively both reduce visual hallucinations and enrich the skill repertoire with low-level web navigation skills, thereby reducing the low-level skill missing error.
+        ...
     </p>
     <div class="chart-container" id="chart-feedback" style="margin: 0 auto; max-width: 800px;">
         <canvas id="chart-sr-w-feedback" style="width: 100%; height: 400px;"></canvas>
@@ -475,6 +445,13 @@
         <canvas id="chart-feedback-provider" style="width: 100%; height: 400px;"></canvas>
     </div>
 </div> -->
+
+<div class="row">
+    <h3 style="text-align: left;">Comparison</h3>
+    <div class="row" align="center">
+        <image src="img/compare_full.png" class="img-responsive" alt="overview" width="85%" style="max-height: 1200px;margin:auto;" />
+    </div>
+</div>
 
 
 
@@ -675,7 +652,6 @@
 
 
 
-
     <div class="row">
         <h3> Citation </h3>
         <div class="col-md-8 col-md-offset-2">
@@ -696,5 +672,7 @@ placeholder
         </div>
     </div> -->
 </div>
+</body>
+</html>
 </body>
 </html>
