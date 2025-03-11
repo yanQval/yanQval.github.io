@@ -1,1 +1,205 @@
-coming soon
+<!DOCTYPE html>
+<html>
+<head lang="en">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>RTDiff: Reverse Trajectory Synthesizer via Diffusion for Offline Reinforcement Learning </title>
+<meta name="description" content="In offline reinforcement learning (RL), managing the distribution shift between the learned policy and the static offline dataset is a persistent challenge that can result in overestimated values and suboptimal policies. Traditional offline RL methods address this by introducing conservative biases that limit exploration to well-understood regions, but they often overly restrict the agent's generalization capabilities. Recent work has sought to generate trajectories using generative models to augment the offline dataset, yet these methods still struggle with overestimating synthesized data, especially when out-of-distribution samples are produced. To overcome this issue, we propose RTDiff, a novel diffusion-based data augmentation technique that synthesizes trajectories \emph{in reverse}, moving from unknown to known states. Such reverse generation naturally mitigates the risk of overestimation by ensuring that the agent avoids planning through unknown states. Additionally, reverse trajectory synthesis allows us to generate longer, more informative trajectories that take full advantage of diffusion models' generative strengths while ensuring reliability. We further enhance RTDiff by introducing flexible trajectory length control and improving the efficiency of the generation process through noise management. Our empirical results show that RTDiff significantly improves the performance of several state-of-the-art offline RL algorithms across diverse environments, achieving consistent and superior results by effectively overcoming distribution shift.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- <meta property="og:image" content="img/teaser_simple.jpg">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1335">
+<meta property="og:image:height" content="1192"> -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yanqval.github.io/RTDiff">
+<meta property="og:title" content="RTDiff: Reverse Trajectory Synthesizer via Diffusion for Offline Reinforcement Learning">
+<meta property="og:description" content="In offline reinforcement learning (RL), managing the distribution shift between the learned policy and the static offline dataset is a persistent challenge that can result in overestimated values and suboptimal policies. Traditional offline RL methods address this by introducing conservative biases that limit exploration to well-understood regions, but they often overly restrict the agent's generalization capabilities. Recent work has sought to generate trajectories using generative models to augment the offline dataset, yet these methods still struggle with overestimating synthesized data, especially when out-of-distribution samples are produced. To overcome this issue, we propose RTDiff, a novel diffusion-based data augmentation technique that synthesizes trajectories \emph{in reverse}, moving from unknown to known states. Such reverse generation naturally mitigates the risk of overestimation by ensuring that the agent avoids planning through unknown states. Additionally, reverse trajectory synthesis allows us to generate longer, more informative trajectories that take full advantage of diffusion models' generative strengths while ensuring reliability. We further enhance RTDiff by introducing flexible trajectory length control and improving the efficiency of the generation process through noise management. Our empirical results show that RTDiff significantly improves the performance of several state-of-the-art offline RL algorithms across diverse environments, achieving consistent and superior results by effectively overcoming distribution shift.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="RTDiff: Reverse Trajectory Synthesizer via Diffusion for Offline Reinforcement Learning">
+<meta name="twitter:description" content="In offline reinforcement learning (RL), managing the distribution shift between the learned policy and the static offline dataset is a persistent challenge that can result in overestimated values and suboptimal policies. Traditional offline RL methods address this by introducing conservative biases that limit exploration to well-understood regions, but they often overly restrict the agent's generalization capabilities. Recent work has sought to generate trajectories using generative models to augment the offline dataset, yet these methods still struggle with overestimating synthesized data, especially when out-of-distribution samples are produced. To overcome this issue, we propose RTDiff, a novel diffusion-based data augmentation technique that synthesizes trajectories \emph{in reverse}, moving from unknown to known states. Such reverse generation naturally mitigates the risk of overestimation by ensuring that the agent avoids planning through unknown states. Additionally, reverse trajectory synthesis allows us to generate longer, more informative trajectories that take full advantage of diffusion models' generative strengths while ensuring reliability. We further enhance RTDiff by introducing flexible trajectory length control and improving the efficiency of the generation process through noise management. Our empirical results show that RTDiff significantly improves the performance of several state-of-the-art offline RL algorithms across diverse environments, achieving consistent and superior results by effectively overcoming distribution shift.">
+<!-- <meta name="twitter:image" content="img/teaser_simple.jpg"> -->
+<!-- mirror: F0%9F%AA%9E&lt -->
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/font-awesome.min.css">
+<link rel="stylesheet" href="css/codemirror.min.css">
+<link rel="stylesheet" href="css/app.css">
+<style>
+.rrotated {
+    transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    /* Internet Explorer 9*/
+    -moz-transform: rotate(90deg);
+    /* Firefox */
+    -webkit-transform: rotate(90deg);
+    /* Safari 和 Chrome */
+    -o-transform: rotate(90deg);/* Opera */
+}
+.lrotated {
+    transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    /* Internet Explorer 9*/
+    -moz-transform: rotate(270deg);
+    /* Firefox */
+    -webkit-transform: rotate(270deg);
+    /* Safari 和 Chrome */
+    -o-transform: rotate(270deg);/* Opera */
+}
+</style>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/codemirror.min.js"></script>
+<script src="js/clipboard.min.js"></script>
+<script src="js/video_comparison.js"></script>
+<script src="js/app.js"></script>
+<!-- 引入 DataTables 的 CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+
+<style>
+    .table-container {
+        width: 100%;
+        overflow-x: auto; /* 允许水平滚动 */
+        margin: 20px 0;
+        padding-bottom: 20px; /* 添加下边距 */
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 1000px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+        white-space: nowrap;
+    }
+    th {
+        background-color: #f2f2f2;
+        cursor: pointer;
+    }
+    .bg-gray {
+        background-color: #f9f9f9;
+    }
+    .italic {
+        font-style: italic;
+    }
+    .bold {
+        font-weight: bold;
+    }
+    /* Highlight maximum values */
+    .max-value {
+        background-color: #d1e7dd;
+        font-weight: bold;
+    }
+    /* Highlight previously bolded numbers */
+    .highlighted-number {
+        background-color: #fff3cd;
+        font-weight: bold;
+    }
+</style>
+
+<!-- 引入 jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<!-- 引入 DataTables 的 JavaScript -->
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+</head>
+
+<body>
+<div class="container" id="header" style="text-align: center; margin: auto;">
+    <div class="row" id="title-row" style="max-width: 100%; margin: 0 auto; display: inline-block">
+        <h2 class="col-md-12 text-center" id="title"> 
+            <h2 class="col-md-12 text-center" id="title"> <b>RTDiff</b>: Reverse Trajectory Synthesizer via Diffusion for Offline Reinforcement Learning <br>
+            <small> ICML 2024 </small> </h2>
+        </h2>
+    </div>
+    <div class="row" id="author-row" style="margin:0 auto;">
+        
+        <div class="col-md-12 text-center" style="display: table; margin:0 auto">
+            <a style="text-decoration:none" href="https://scholar.google.com/citations?user=iV5nuc4AAAAJ"> Qianlan Yang </a>
+            &emsp;
+            <a style="text-decoration:none" href="https://yxw.cs.illinois.edu/"> Yu-Xiong Wang </a><br/>
+            University of Illinois at Urbana-Champaign<br/>
+            {<a style="text-decoration:none" href="mailto:qianlan2@illinois.edu">qianlan2</a>, <a style="text-decoration:none" href="mailto:yxw@illinois.edu">yxw</a>}@illinois.edu
+        </div>
+    </div>
+</div>
+<script>
+        document.getElementById('author-row').style.maxWidth = document.getElementById("title-row").clientWidth + 'px';
+    </script>
+<div class="container" id="main">
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3 text-center">
+            <ul class="nav nav-pills nav-justified">
+                <li> <a href="./paper.html?version=1"> <img src="https://info.arxiv.org/brand/images/brand-logomark-primary-large.jpg" height="60px" />
+                    <h4><strong>Paper</strong></h4>
+                    </a> </li>
+                <!-- <li> <a href="./poster.pdf"> <img src="./img/poster_small.png" height="60px" />
+                    <h4><strong>Poster</strong></h4>
+                    </a> </li> -->
+                <!-- <li> <a href="./presentation.html?version=1"> <img src="./img/youtube_icon.png" height="60px" />
+                    <h4><strong>Video</strong></h4>
+                    </a> </li> -->
+                <li> <a href="https://github.com/yanQval/yanQval.github.io/RTDiff/code" target="_blank">
+                    <image src="img/github.png" height="60px" />
+                    <h4><strong>Code</strong></h4>
+                    </a> </li>
+            </ul>
+        </div>
+    </div>
+    
+    <!--
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="video-compare-container" id="materialsDiv">
+                    <video class="video" id="materials" loop playsinline autoPlay muted src="video/materials_circle_mipnerf_ours.mp4" onplay="resizeAndPlay(this)"></video>
+                    
+                    <canvas height=0 class="videoMerge" id="materialsMerge"></canvas>
+                </div>
+            </div>
+        </div>
+		-->
+    
+    <div class="row" align="center">
+        <image src="img/illu.png" class="img-responsive" alt="overview" width="55%" style="max-height: 600px;margin:auto;" />
+    </div>
+    <div class="row">
+        <h3> Abstract </h3>
+        
+        <div class="col-md-8 col-md-offset-2 col-lg-offset-0 col-lg-12">
+            <p class="text-justify"> In offline reinforcement learning (RL), managing the distribution shift between the learned policy and the static offline dataset is a persistent challenge that can result in overestimated values and suboptimal policies. Traditional offline RL methods address this by introducing conservative biases that limit exploration to well-understood regions, but they often overly restrict the agent's generalization capabilities. Recent work has sought to generate trajectories using generative models to augment the offline dataset, yet these methods still struggle with overestimating synthesized data, especially when out-of-distribution samples are produced. To overcome this issue, we propose RTDiff, a novel diffusion-based data augmentation technique that synthesizes trajectories \emph{in reverse}, moving from unknown to known states. Such reverse generation naturally mitigates the risk of overestimation by ensuring that the agent avoids planning through unknown states. Additionally, reverse trajectory synthesis allows us to generate longer, more informative trajectories that take full advantage of diffusion models' generative strengths while ensuring reliability. We further enhance RTDiff by introducing flexible trajectory length control and improving the efficiency of the generation process through noise management. Our empirical results show that RTDiff significantly improves the performance of several state-of-the-art offline RL algorithms across diverse environments, achieving consistent and superior results by effectively overcoming distribution shift. </p>
+        </div>
+    </div>
+    <!-- <div class="row">
+        <h3> Workflow</h3>
+        <image src="img/paradigm.png" class="img-responsive" alt="overview" width="100%" style="margin:auto;" /> -->
+
+
+
+
+    <div class="row">
+        <h3> Citation </h3>
+        <div class="col-md-8 col-md-offset-2">
+            <div class="form-group col-md-10 col-md-offset-1">
+                <textarea id="bibtex" class="form-control" readonly>
+@inproceedings{rtdiff,
+    title={{RTDiff}: Reverse Trajectory Synthesizer via Diffusion for Offline Reinforcement Learning},
+    author={Yang, Qianlan and Wang, Yu-Xiong},
+    booktitle={ICLR},
+    year={2024}
+}
+</textarea>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <h3> Acknowledgements </h3>
+        <div class="col-md-8 col-md-offset-2 col-lg-offset-0 col-lg-12">
+            <p class="text-justify"> 
+                The website template is borrowed from <a href="https://immortalco.github.io/ConsistDreamer/">ConsistDreamer</a>. <br/>
+                We thank you and the other <script type="text/javascript" src="https://counter.websiteout.net/js/7/0/0/0"></script> visitors for visiting our project page.
+            </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
